@@ -18,14 +18,11 @@ const client_1 = require("@prisma/client");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const router = (0, express_1.Router)();
 const prisma = new client_1.PrismaClient();
-router.post("/login", (req, res) => {
-    res.send("Login");
-});
 router.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username, password } = req.body;
         const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-        const user = yield prisma.user.create({
+        yield prisma.user.create({
             data: {
                 username,
                 password: hashedPassword,
