@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const client_1 = require("@prisma/client");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const router = (0, express_1.Router)();
 const prisma = new client_1.PrismaClient();
 router.post("/login", (req, res) => {
@@ -34,6 +35,27 @@ router.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
     catch (error) {
         res.status(500).json({ error: "Registration failed", message: error });
+    }
+}));
+router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { username, password } = req.body;
+        const user = yield prisma.user.findUnique({
+            where: {
+                username,
+            },
+        });
+        const passwordMatch = yield bcrypt_1.default.compare(password, user.password);
+        if (!passwordMatch) {
+            return res.status(401).json({ error: "Incorrect password" });
+        }
+        const token = jsonwebtoken_1.default.sign({ userId: user.username }, process.env.SECRET_KEY, {
+            expiresIn: "3h",
+        });
+        res.status(200).json({ token });
+    }
+    catch (error) {
+        res.status(500).json({ error: "Login failed" });
     }
 }));
 exports.default = router;
