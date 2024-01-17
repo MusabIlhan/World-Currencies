@@ -39,6 +39,7 @@ const Auth = () => {
     } else {
       login();
     }
+    // TODO: Handle errors and give direction to user on sign up success to sign in
   };
 
   return (

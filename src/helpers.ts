@@ -1,10 +1,12 @@
 export const fetchData = (
   path: string,
   method: "POST" | "GET",
-  data: Record<string, string>
+  data: Record<string, string>,
+  authorization?: string
 ) => {
   const headers = {
     "Content-Type": "application/json",
+    ...(authorization && {Authorization: authorization}),
   };
 
   const options = {

@@ -1,6 +1,8 @@
 import express from "express";
 
 import authRoutes from "./routes/auth";
+import mainRoutes from "./routes/main";
+
 import bodyParser from "body-parser";
 import cors from "cors";
 const app = express();
@@ -8,6 +10,7 @@ const router = express.Router();
 const port = 3001;
 
 router.use("/auth", authRoutes);
+router.use("/main", mainRoutes);
 
 app.use(
   cors({
